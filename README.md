@@ -4,3 +4,13 @@
 ![GitHub forks](https://img.shields.io/github/forks/zitske/PlaneStabilizer?style=for-the-badge)
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/zitske/PlaneStabilizer?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/zitske/PlaneStabilizer?style=for-the-badge)
+
+### Requirements
+
+The following requirements are mandatory:
+
+- [x] Data input (e.g. sensors, keyboard, data communication, etc.)
+- [x] Data output (e.g. actuators, displays, data communication, etc.)
+- [x] Data processing and storage (e.g. signal processing techniques, writing and reading files, etc.)
+- [x] Synchronization/communication, such as: semaphore, queue, mutex or other.
+- [x] Timing such as: timers, delays, timeouts, etc.
