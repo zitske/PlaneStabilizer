@@ -1,8 +1,11 @@
+#include <Arduino.h>
 #include<Wire.h>
 #include<Servo.h>
 #include <SD.h>
+#include <protothreads.h>
 
-#define battPin0 A11    // select the input pins for the batteries
+// select the input pins for the batteries
+#define battPin0 A11    
 #define battPin1 A14
 #define battPin2 A12
 
@@ -11,8 +14,8 @@ Servo servo2;
 Servo servo3;
 
 
-int servo_pin = A3;
-int servo_pin2 = A2;
+int servo_pin = A2;
+int servo_pin2 = A3;
 int servo_pin3 = A1;
 int sd_cs_pin = 53;
 int light_pin = A6;
@@ -54,28 +57,51 @@ float percentage;
 float adcVolt = 0.0041780351906158 ; // one point on the ADC equals this many volts
 // End battery variables
 
-void setup() {
-  pinMode(light_pin,OUTPUT);
+// Protothread
+pt ptReadWrite;
+int readWriteThread(struct pt* pt) {
+  PT_BEGIN(pt);
+  //PT_SLEEP(pt, 200);
+  //PT_YIELD(pt);
+  // Loop forever
   
-  Serial.begin(115200);
-  
-  mpu_setup();
-  
-  //Starting SD
-  SD.begin(sd_cs_pin);
-
-  servos_attach();
-  get_baterry_average(50);
-  
+  for(;;) {
+    get_GyroData();
+    update_Servo_position();
+    PT_SLEEP(pt, 20);
+    PT_YIELD(pt);
+  }
+PT_END(pt);
 }
 
-void loop() {
-  get_GyroData();
-  update_Servo_position();
+pt ptDatalogger;
+int dataloggerThread(struct pt* pt) {
+  PT_BEGIN(pt);
+
+  // Loop forever
+  for(;;) {
   write_log(generate_logData());
   update_time();
-  delay(20);
+  PT_YIELD(pt);
+  }
+
+  PT_END(pt);
 }
+
+pt ptLight;
+int lightThread(struct pt* pt) {
+  PT_BEGIN(pt);
+
+  // Loop forever
+  for(;;) {
+  light_mode(1);
+  PT_YIELD(pt);
+  }
+
+  PT_END(pt);
+}
+
+
 float getBattVolts() {
   // read the value from the sensor:
   abattValue0 = (analogRead(battPin0) * battWeighting) + (abattValue0 * (1-battWeighting));
@@ -166,8 +192,8 @@ void write_log(String data){
 
 void update_Servo_position(){
   servo.write(constrain(Zangle+90,p_rudder_min,p_rudder_max));
-  servo2.write(constrain(Xangle + 90,p_airelon_min,p_airelon_max));
-  servo3.write(constrain(-Yangle + 90,p_elevator_min,p_elevator_max));
+  servo3.write(constrain(-Yangle + 90,p_airelon_min,p_airelon_max));
+  servo2.write(constrain(Xangle + 90,p_elevator_min,p_elevator_max));
 }
 
 void light_mode(int mode){
@@ -202,4 +228,30 @@ void get_baterry_average(int times){
   for (int i=0; i<times; i++){
       getBattVolts();
     }
+}
+
+
+void setup() {
+  pinMode(light_pin,OUTPUT);
+  
+  Serial.begin(115200);
+  
+  mpu_setup();
+  
+  //Starting SD
+  SD.begin(sd_cs_pin);
+
+  servos_attach();
+  get_baterry_average(50);
+  PT_INIT(&ptReadWrite);
+  PT_INIT(&ptDatalogger);
+}
+
+
+
+void loop() {
+
+  PT_SCHEDULE(readWriteThread(&ptReadWrite));
+  PT_SCHEDULE(dataloggerThread(&ptDatalogger));
+  PT_SCHEDULE(lightThread(&ptLight));
 }
