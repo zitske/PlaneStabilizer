@@ -7,7 +7,7 @@
 
 ### Requirements
 
-The following requirements are mandatory:
+The following requirements was mandatory:
 
 - [x] Data input (e.g. sensors, keyboard, data communication, etc.)
 - [x] Data output (e.g. actuators, displays, data communication, etc.)
