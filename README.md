@@ -15,9 +15,16 @@ The following requirements are mandatory:
 - [x] Synchronization/communication, such as: semaphore, queue, mutex or other.
 - [x] Timing such as: timers, delays, timeouts, etc.
 
+## 💻 Hardware Devices
 
-## 📝 Licença
+In this list is all the hardware needed for this project:
+<!---Estes são apenas requisitos de exemplo. Adicionar, duplicar ou remover conforme necessário--->
+* Microcontroller `Arduino Mega`
+* Accelerometer / gyroscope `MPU6050`
+* Servo `4x SG90`.
 
-Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
+## 📝 License
 
-[⬆ Voltar ao topo](#PlaneStabilizer)<br>
+This project is under license. See the [LICENSE](LICENSE.md) file for more details.
+
+[⬆ Back to the top](#PlaneStabilizer)<br>
