@@ -14,3 +14,10 @@ The following requirements are mandatory:
 - [x] Data processing and storage (e.g. signal processing techniques, writing and reading files, etc.)
 - [x] Synchronization/communication, such as: semaphore, queue, mutex or other.
 - [x] Timing such as: timers, delays, timeouts, etc.
+
+
+## 📝 Licença
+
+Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
+
+[⬆ Voltar ao topo](#PlaneStabilizer)<br>
